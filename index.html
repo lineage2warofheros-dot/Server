@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lineage 2 – War of Heroes</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      font-family: "Cinzel", serif;
+      overflow-x: hidden;
+      color: #fff;
+    }
+
+    /* Background Video */
+    .video-background {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -3;
+    }
+    .video-background iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      pointer-events: none;
+    }
+
+    /* Overlay */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.45);
+      z-index: -2;
+    }
+
+    /* Particles */
+    #particles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      padding: 15px;
+      z-index: 20;
+      backdrop-filter: blur(5px);
+    }
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    .navbar a {
+      text-decoration: none;
+      color: gold;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .navbar a:hover {
+      color: white;
+      text-shadow: 0 0 10px gold;
+    }
+
+    /* Logo */
+    .logo img {
+      height: 280px;
+      width: auto;
+      filter: drop-shadow(0 0 15px gold) drop-shadow(0 0 30px orange);
+      transition: transform 0.3s ease, filter 0.3s ease;
+      cursor: pointer;
+    }
+    .logo img:hover {
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 25px gold) drop-shadow(0 0 50px orange);
+    }
+
+    /* Content Wrapper */
+    .content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      padding-top: 120px;
+    }
+
+    /* Main Title */
+    .title {
+      font-size: 4rem;
+      font-weight: bold;
+      text-shadow: 0 0 20px #ffae00, 0 0 40px #ffd700;
+      animation: glow 2s infinite alternate;
+      margin-bottom: 15px;
+    }
+    .subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+      font-style: italic;
+      color: #ddd;
+    }
+
+    /* Call to Action Buttons */
+    .cta-buttons {
+      margin-top: 20px;
+    }
+    .cta-buttons a {
+      margin: 0 10px;
+      padding: 12px 25px;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #ffd700, #ffae00);
+      color: #000;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.4s;
+      box-shadow: 0 0 15px #ffae00, inset 0 0 5px #fff;
+      font-size: 1.1rem;
+    }
+    .cta-buttons a:hover {
+      background: linear-gradient(145deg, #ffae00, #ffd700);
+      transform: scale(1.1);
+      box-shadow: 0 0 25px #ffd700, inset 0 0 10px #fff;
+    }
+
+    /* Slideshow */
+    .slideshow {
+      margin: 60px auto 20px;
+      max-width: 900px;
+      height: 250px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 15px;
+      box-shadow: 0 0 20px gold;
+    }
+    .slideshow img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+    .slideshow img.active {
+      opacity: 1;
+    }
+
+    /* Section Wrapper */
+    section {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 25px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 0 15px #444;
+    }
+    section h2 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      text-shadow: 0 0 15px #ffae00;
+    }
+    section p, li {
+      font-size: 1.2rem;
+      margin: 8px 0;
+    }
+
+    /* Online Status */
+    .online-status {
+      font-size: 1.5rem;
+      margin-top: 15px;
+      color: lime;
+      font-weight: bold;
+    }
+
+    /* Social Icons */
+    .social-icons {
+      margin-top: 20px;
+    }
+    .social-icons a {
+      font-size: 2rem;
+      margin: 0 10px;
+      color: gold;
+      transition: 0.3s;
+    }
+    .social-icons a:hover {
+      color: white;
+      text-shadow: 0 0 10px gold;
+    }
+
+    /* Footer */
+    footer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #ccc;
+      text-shadow: 0 0 5px black;
+      z-index: 5;
+    }
+
+    /* Animations */
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ffae00, 0 0 20px #ffd700; }
+      to { text-shadow: 0 0 30px #ffae00, 0 0 60px #ffd700; }
+    }
+
+    /* Download Section */
+    .download-options a {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      background: linear-gradient(145deg, #ffd700, #ffae00);
+      color: #000;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 0 10px #ffae00;
+    }
+    .download-options a:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px #ffd700;
+    }
+  </style>
+</head>
+<body id="home">
+
+  <!-- Background Video -->
+  <div class="video-background">
+    <iframe src="https://kinescope.io/embed/dfN9bvRZR1AX9nvYMGqCCJ?autoplay=1&mute=1&loop=1&background=1"
+            allow="autoplay; fullscreen; picture-in-picture; encrypted-media;"
+            allowfullscreen>
+    </iframe>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay"></div>
+
+  <!-- Particles -->
+  <canvas id="particles"></canvas>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#info">Server Info</a></li>
+      <li><a href="#events">Events</a></li>
+      <li><a href="#download">Download</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="logo">
+      <img src="assets/images/logo.png" alt="Lineage 2 Logo">
+    </div>
+    <h1 class="title">Lineage 2 – War of Heroes</h1>
+    <p class="subtitle">The Epic MMORPG Adventure Awaits</p>
+    <p style="font-size:1.3rem; text-shadow:0 0 10px #ffae00; margin-bottom:25px;">
+      Server is <span style="color:lime; font-weight:bold;">LIVE!</span>
+    </p>
+
+    <!-- Call to Action -->
+    <div class="cta-buttons">
+      <a href="https://drive.google.com/file/d/15VDIOBgC5RfOTYPxB_saOacFOPd1-Nsl/view?usp=sharing" target="_blank">Play Now</a>
+      <a href="https://discord.gg/8g26DrVJpK" target="_blank">Join Discord</a>
+      <a href="https://www.facebook.com/profile.php?id=61579187976182" target="_blank">Facebook Page</a>
+    </div>
+  </div>
+
+  <!-- Slideshow -->
+  <div class="slideshow">
+    <img src="assets/images/slide1.jpg" class="active" alt="Slide 1">
+    <img src="assets/images/slide2.jpg" alt="Slide 2">
+    <img src="assets/images/slide3.jpg" alt="Slide 3">
+  </div>
+
+  <!-- Server Info -->
+  <section id="info">
+    <h2>Server Information</h2>
+    <p><strong>Official Launch:</strong> September 19, 2025</p>
+    <p><strong>Rates:</strong> x50 EXP | x20 SP | x10 Adena</p>
+    <p><strong>Features:</strong> Custom Events, Balanced PvP, Active GMs</p>
+    <p><strong>Status:</strong> <span style="color:lime">ONLINE</span></p>
+    <div class="online-status">Players Online: 124</div>
+  </section>
+
+  <!-- Events Section -->
+  <section id="events">
+    <h2>Upcoming Events</h2>
+    <ul>
+      <li><strong>Castle Siege:</strong> Every Sunday 8PM (GMT+8)</li>
+      <li><strong>PvP Tournament:</strong> September 30, 2025</li>
+      <li><strong>Raid Boss Madness:</strong> Double Drops Weekend</li>
+    </ul>
+  </section>
+
+  <!-- Community / Testimonials -->
+  <section class="community">
+    <h2>What Players Say</h2>
+    <blockquote>"Best PvP server I’ve played! GM is active and events are fun!"</blockquote>
+    <blockquote>"Balanced gameplay and nostalgic vibes. Love it!"</blockquote>
+  </section>
+
+  <!-- Download Section -->
+  <section id="download" class="download">
+    <h2>Download Client</h2>
+    <p>Choose your version below:</p>
+    <div class="download-options">
+      <a href="#">Full Client</a>
+      <a href="#">Updater Only</a>
+    </div>
+  </section>
+
+  <!-- Contact / Socials -->
+  <section id="contact">
+    <h2>Contact & Community</h2>
+    <p>Stay connected with our community:</p>
+    <div class="social-icons">
+      <a href="https://discord.gg/8g26DrVJpK"><i class="fab fa-discord"></i></a>
+      <a href="https://www.facebook.com/profile.php?id=61579187976182"><i class="fab fa-facebook"></i></a>
+      <a href="https://youtube.com"><i class="fab fa-youtube"></i></a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 Lineage 2 – War of Heroes. All Rights Reserved.
+    <br>
+    <button onclick="toggleMusic()">🎵 Toggle Music</button>
+  </footer>
+
+  <!-- Background Music -->
+  <audio id="bg-music" loop>
+    <source src="assets/music/theme.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Particles Script -->
+  <script>
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particlesArray = [];
+    const numParticles = 100;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = (Math.random() - 0.5) * 1;
+        this.speedY = (Math.random() - 0.5) * 1;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.size > 0.2) this.size -= 0.01;
+      }
+      draw() {
+        ctx.fillStyle = "rgba(255, 215, 0, 0.8)";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      for (let i = 0; i < numParticles; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesArray.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    init();
+    animate();
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Slideshow Script
+    const slides = document.querySelectorAll(".slideshow img");
+    let currentSlide = 0;
+    setInterval(() => {
+      slides[currentSlide].classList.remove("active");
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add("active");
+    }, 5000);
+
+    // Background Music Toggle
+    const bgMusic = document.getElementById("bg-music");
+    function toggleMusic() {
+      if (bgMusic.paused) {
+        bgMusic.play();
+      } else {
+        bgMusic.pause();
+      }
+    }
+  </script>
+
+</body>
+</html>
